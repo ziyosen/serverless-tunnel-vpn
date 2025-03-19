@@ -5416,6 +5416,12 @@
 103.133.223.52,2096,ID,Cloud Teknologi Nusantara
 172.232.231.24,587,ID,Akamai Connected Cloud
 8.218.107.145,31166,ID,PT Cloud Hosting Indonesia
+8.215.196.18,587,ID,Alibaba
+35.219.15.90,443,ID,Google Cloud
+36.95.152.58,12137,ID,PT Telkom Indonesia
+43.218.77.16,443,ID,Amazoncom
+103.6.207.108,8080,ID,PT Pusat Media Indonesia
+172.232.237.112,2053,ID,Akamai Connected Cloud
 40.113.60.248,2053,IE,Microsoft Azure
 52.169.27.133,2053,IE,Microsoft Azure
 38.180.21.33,443,IE,M247 Europe SRL
@@ -12508,15 +12514,4 @@
 152.32.255.24,587,VN,UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED
 103.15.90.134,49678,VN,Vietnam Posts And Telecommunications Group
 38.54.30.6,443,VN,Kaopu Cloud HK Limited
-4.221.60.243,2053,ZA,Microsoft Corporation
-8.215.196.18,587,ID,Alibaba
-8.215.196.18,587,ID,Alibaba
-35.219.15.90,443,ID,Google Cloud
-35.219.50.99,443,ID,Google Cloud
-36.95.152.58,12137,ID,PT Telkom Indonesia
-43.218.77.16,443,ID,Amazoncom
-43.218.77.16,1443,ID,Amazoncom
-43.218.77.16,1443,ID,Amazoncom
-103.6.207.108,8080,ID,PT Pusat Media Indonesia
-172.232.237.112,2053,ID,Akamai Connected Cloud
-172.232.239.151,587,ID,Akamai Connected Cloud
+4.221.60.243,2053,ZA,Microsoft Corporation

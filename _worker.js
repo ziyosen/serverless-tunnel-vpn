@@ -22,6 +22,8 @@ const DNS_SERVER_PORT = 53;
 const PROXY_HEALTH_CHECK_API = "https://id1.foolvpn.me/api/v1/check";
 const CONVERTER_URL = "https://api.foolvpn.me/convert";
 const DONATE_LINK = "https://trakteer.id/dickymuliafiqri/tip";
+const BAD_WORDS_LIST =
+  "https://gist.githubusercontent.com/adierebel/a69396d79b787b84d89b45002cb37cd6/raw/6df5f8728b18699496ad588b3953931078ab9cf1/kata-kasar.txt";
 const PROXY_PER_PAGE = 24;
 const WS_READY_STATE_OPEN = 1;
 const WS_READY_STATE_CLOSING = 2;
@@ -996,7 +998,19 @@ class CloudflareApi {
 
     try {
       const domainTest = await fetch(`https://${domain.replaceAll("." + APP_DOMAIN, "")}`);
-      if (domainTest.status == 530) return 530;
+      if (domainTest.status == 530) return domainTest.status;
+
+      const badWordsListRes = await fetch(BAD_WORDS_LIST);
+      if (badWordsListRes.status == 200) {
+        const badWordsList = (await badWordsListRes.text()).split("\n");
+        for (const badWord of badWordsList) {
+          if (domain.includes(badWord.toLowerCase())) {
+            return 403;
+          }
+        }
+      } else {
+        return 403;
+      }
     } catch (e) {
       return 400;
     }

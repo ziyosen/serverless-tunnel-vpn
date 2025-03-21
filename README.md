@@ -2,6 +2,11 @@
 
 Sebuah repository serverless tunnel studi kasus Indonesia
 
+> ## NOTES.md
+>
+> Kamu tidak perlu membayar untuk menggunakan kode dalam repository/layanan ini.  
+> Kalau kamu membayar kepada siapapun, berarti kamu terkena scam.
+
 # Fitur
 
 - [x] Otomatis split protocol VLESS, Trojan, dan Shadowsocks

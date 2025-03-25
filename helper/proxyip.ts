@@ -47,17 +47,21 @@ async function sendRequest(host: string, path: string, proxy: any = null) {
     });
 
     let responseBody = "";
+
+    const timeout = setTimeout(() => {
+      socket.destroy();
+      reject(new Error("socket timeout"));
+    }, 5000);
+
     socket.on("data", (data) => (responseBody += data.toString()));
     socket.on("end", () => {
+      clearTimeout(timeout);
       const body = responseBody.split("\r\n\r\n")[1] || "";
       resolve(body);
     });
-
-    socket.on("error", (error) => reject(error));
-
-    socket.setTimeout(5000, () => {
-      reject(new Error("Request timeout"));
-      socket.end();
+    socket.on("error", (error) => {
+      // console.log(error);
+      reject(error);
     });
   });
 }

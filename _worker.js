@@ -1477,8 +1477,9 @@ let baseHTML = `
           }
 
           let isActive = false;
+          // Check dengan ID1
           new Promise(async (resolve) => {
-            const res = await fetch("https://${serviceName}.${rootDomain}/check?target=" + target)
+            const res = await fetch("https://id1.foolvpn.me/api/v1/check?ip=" + target)
               .then(async (res) => {
                 if (isActive) return;
                 if (res.status == 200) {
@@ -1486,14 +1487,38 @@ let baseHTML = `
                   const jsonResp = await res.json();
                   if (jsonResp.proxyip === true) {
                     isActive = true;
-                    pingElement.textContent = "Active " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
+                    pingElement.textContent = "ID1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
                     pingElement.classList.add("text-green-600");
                   } else {
-                    pingElement.textContent = "Inactive";
+                    pingElement.textContent = "ID1: Inactive";
                     pingElement.classList.add("text-red-600");
                   }
                 } else {
-                  pingElement.textContent = "Check Failed!";
+                  pingElement.textContent = "ID1: Check Failed!";
+                }
+              })
+              .finally(() => {
+                resolve(0);
+              });
+          });
+
+          // Check dengan SG1
+          new Promise(async (resolve) => {
+            const res = await fetch("https://sg1.foolvpn.me/api/v1/check?ip=" + target)
+              .then(async (res) => {
+                if (res.status == 200) {
+                  const jsonResp = await res.json();
+                  if (jsonResp.proxyip === true) {
+                    const id2Status = document.createElement("div");
+                    id2Status.textContent = "SG1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
+                    id2Status.classList.add("text-green-600", "text-xs", "font-semibold");
+                    pingElement.parentNode.appendChild(id2Status);
+                  } else {
+                    const id2Status = document.createElement("div"); 
+                    id2Status.textContent = "SG1: Inactive";
+                    id2Status.classList.add("text-red-600", "text-xs", "font-semibold");
+                    pingElement.parentNode.appendChild(id2Status);
+                  }
                 }
               })
               .finally(() => {

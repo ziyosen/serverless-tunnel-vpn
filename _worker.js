@@ -1076,521 +1076,506 @@ class CloudflareApi {
  */
 let baseHTML = `
 <!DOCTYPE html>
-<html lang="en" id="html" class="scroll-auto scrollbar-hide dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Proxy List</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      /* For Webkit-based browsers (Chrome, Safari and Opera) */
-      .scrollbar-hide::-webkit-scrollbar {
-          display: none;
+<html lang="en" id="html" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxy List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+    .card-hover {
+      transition: all 0.2s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0,..1);
+    }
+    .dark .card-hover:hover {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .gradient-text {
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+            },
+            dark: {
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
       }
-
-      /* For IE, Edge and Firefox */
-      .scrollbar-hide {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
-      }
-    </style>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'selector',
-      }
-    </script>
-  </head>
-  <body class="bg-white dark:bg-neutral-800 bg-fixed">
-    <!-- Notification -->
-    <div
-      id="notification-badge"
-      class="fixed z-50 opacity-0 transition-opacity ease-in-out duration-300 mt-9 mr-6 right-0 p-3 max-w-sm bg-white rounded-xl border border-2 border-neutral-800 flex items-center gap-x-4"
-    >
-      <div class="shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#171717" class="size-6">
-          <path
-            d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z"
-          />
-          <path
-            fill-rule="evenodd"
-            d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z"
-            clip-rule="evenodd"
-          />
+    }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-dark-900 min-h-screen font-sans">
+  <!-- Notification -->
+  <div id="notification-badge" class="fixed z-50 top-4 right-4 opacity-0 transition-all duration-300">
+    <div class="bg-white dark:bg-dark-800 rounded-lg p- p-4 flex items-center gap-3 border border-gray-200 dark:border-gray-700">
+      <div class="text-green-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
       <div>
-        <div class="text-md font-bold text-blue-500">Berhasil!</div>
-        <p class="text-sm text-neutral-800">Akun berhasil disalin</p>
+        <div class="font-medium text-gray-900 dark:text-white">Success!</div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Configuration copied</p>
       </div>
     </div>
-    <!-- Select Country -->
-    <div>
-      <div
-        class="h-full fixed top-0 w-14 bg-white dark:bg-neutral-800 border-r-2 border-neutral-800 dark:border-white z-20 overflow-y-scroll scrollbar-hide"
-      >
-        <div class="text-2xl flex flex-col items-center h-full gap-2">
-          PLACEHOLDER_BENDERA_NEGARA
-        </div>
-      </div>
+  </div>
+
+  <!-- Sidebar Region Flags -->
+  <aside class="fixed top-0 left-0 h-full w-16 flex flex-col items-center bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700 z-40 py-6 gap-2 overflow-y-auto scrollbar-hide">
+    <div id="region-flags" class="flex flex-col items-center gap-2 w-full">
+      PLACEHOLDER_BENDERA_NEGARA
     </div>
-    <!-- Main -->
-    <div id="container-header">
-      <div id="container-info" class="bg-amber-400 border-2 border-neutral-800 text-right px-5">
-        <div class="flex justify-end gap-3 text-sm">
-          <p id="container-info-ip">IP: 127.0.0.1</p>
-          <p id="container-info-country">Country: Indonesia</p>
-          <p id="container-info-isp">ISP: Localhost</p>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div
-        id="container-title"
-        class="sticky bg-white dark:bg-neutral-800 border-b-2 border-neutral-800 dark:border-white z-10 py-6 w-screen"
-      >
-        <h1 class="text-xl text-center text-neutral-800 dark:text-white">
+  </aside>
+
+  <!-- Main Container -->
+  <div class="container mx-auto px-4 py-8 max-w-7xl" style="margin-left:4.5rem">
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white gradient-text bg-gradient-to-r from-blue-500 to-purple-600">
           PLACEHOLDER_JUDUL
         </h1>
-      </div>
-      <div class="flex gap-6 pt-10 w-screen justify-center">
-        PLACEHOLDER_PROXY_GROUP
-      </div>
-
-      <!-- Pagination -->
-      <nav id="container-pagination" class="w-screen mt-8 sticky bottom-0 right-0 left-0 transition -translate-y-6 z-20">
-        <ul class="flex justify-center space-x-4">
-          PLACEHOLDER_PAGE_BUTTON
-        </ul>
-      </nav>
-    </div>
-
-    <div id="container-window" class="hidden">
-      <!-- Windows -->
-      <!-- Informations -->
-      <div class="fixed z-20 top-0 w-full h-full bg-white dark:bg-neutral-800">
-        <p id="container-window-info" class="text-center w-full h-full top-1/4 absolute dark:text-white"></p>
-      </div>
-      <!-- Output Format -->
-      <div id="output-window" class="fixed z-20 top-0 right-0 w-full h-full flex justify-center items-center hidden">
-        <div class="w-[75%] h-[30%] flex flex-col gap-1 p-1 text-center rounded-md">
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-between">
-              <button
-                onclick="copyToClipboardAsTarget('clash')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
-              >
-                Clash
-              </button>
-              <button
-                onclick="copyToClipboardAsTarget('sfa')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
-              >
-                SFA
-              </button>
-              <button
-                onclick="copyToClipboardAsTarget('bfr')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
-              >
-                BFR
-              </button>
-            </div>
-          </div>
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-between">
-              <button
-                onclick="copyToClipboardAsTarget('v2ray')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
-              >
-                V2Ray/Xray
-              </button>
-              <button
-                onclick="copyToClipboardAsRaw()"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
-              >
-                Raw
-              </button>
-            </div>
-          </div>
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-center">
-              <button
-                onclick="toggleOutputWindow()"
-                class="basis-1/2 border-2 border-indigo-400 hover:bg-indigo-400 dark:text-white p-2 rounded-full flex justify-center items-center"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          PLACEHOLDER_INFO
         </div>
       </div>
-      <!-- Wildcards -->
-      <div id="wildcards-window" class="fixed hidden z-20 top-0 right-0 w-full h-full flex justify-center items-center">
-        <div class="w-[75%] h-[30%] flex flex-col gap-1 p-1 text-center rounded-md">
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-between">
-              <input
-                id="new-domain-input"
-                type="text"
-                placeholder="Input wildcard"
-                class="basis-11/12 w-full h-full px-6 rounded-md focus:outline-0"
-              />
-              <button
-                onclick="registerDomain()"
-                class="p-2 rounded-full bg-amber-400 flex justify-center items-center"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="basis-5/6 w-full h-full rounded-md">
-            <div
-              id="container-domains"
-              class="w-full h-full rounded-md flex flex-col gap-1 overflow-scroll scrollbar-hide"
-            ></div>
-          </div>
-        </div>
-      </div>
+    </header>
+
+    <!-- Proxy Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      PLACEHOLDER_PROXY_GROUP
     </div>
 
-    <footer>
-      <div class="fixed bottom-3 right-3 flex flex-col gap-1 z-50">
-        <a href="${DONATE_LINK}" target="_blank">
-          <button class="bg-green-500 rounded-full border-2 border-neutral-800 p-1 block">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-              <path
-                d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z"
-              />
-              <path
-                fill-rule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-        </a>
-        <button onclick="toggleWildcardsWindow()" class="bg-indigo-400 rounded-full border-2 border-neutral-800 p-1 PLACEHOLDER_API_READY">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25"
-            />
-          </svg>
+    <!-- Pagination -->
+    <div id="container-pagination" class="fixed bottom-6 left-0 right-0 flex justify-center transition-transform duration-300 translate-y-0">
+      <div class="bg-white dark:bg-dark-800 rounded-full shadow-lg px-4 py-2 flex items-center gap-2 border border-gray-200 dark:border-gray-700">
+        PLACEHOLDER_PAGE_BUTTON
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Buttons -->
+  <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+    <button onclick="toggleDarkMode()" class="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-lg hover:bg-primary-600 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    </button>
+    <button onclick="toggleWildcardsWindow()" class="w-12 h-12 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-lg hover:bg-indigo-600 transition-colors PLACEHOLDER_API_READY">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    </button>
+    <a href="${DONATE_LINK}" target="_blank" class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </a>
+  </div>
+
+  <!-- Modals -->
+  <div id="container-window" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity duration-300 flex items-center justify-center">
+    <!-- Output Format Modal -->
+    <div id="output-window" class="bg-white dark:bg-dark-800 rounded-xl p-6 w-full max-w-md shadow-xl hidden animate-fade-in">
+      <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Select Output Format</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="copyToClipboardAsTarget('clash')" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+          Clash
         </button>
-        <button onclick="toggleDarkMode()" class="bg-amber-400 rounded-full border-2 border-neutral-800 p-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-            ></path>
-          </svg>
+        <button onclick="copyToClipboardAsTarget('sfa')" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+          SFA
+        </button>
+        <button onclick="copyToClipboardAsTarget('bfr')" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+          BFR
+        </button>
+        <button onclick="copyToClipboardAsTarget('v2ray')" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+          V2Ray
+        </button>
+        <button onclick="copyToClipboardAsRaw()" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors col-span-2">
+          Raw Config
         </button>
       </div>
-    </footer>
+      <button onclick="toggleOutputWindow()" class="mt-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+        Close
+      </button>
+    </div>
 
-    <script>
-      // Shared
-      const rootDomain = "${serviceName}.${rootDomain}";
-      const notification = document.getElementById("notification-badge");
-      const windowContainer = document.getElementById("container-window");
-      const windowInfoContainer = document.getElementById("container-window-info");
-      const converterUrl =
-        "https://script.google.com/macros/s/AKfycbwwVeHNUlnP92syOP82p1dOk_-xwBgRIxkTjLhxxZ5UXicrGOEVNc5JaSOu0Bgsx_gG/exec";
+    <!-- Wildcards Modal -->
+    <div id="wildcards-window" class="bg-white dark:bg-dark-800 rounded-xl p-6 w-full max-w-md shadow-xl hidden animate-fade-in">
+      <div id="window-info-container" class="text-center mb-4"></div>
+      <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Domain Management</h3>
+      <div class="flex mb-4">
+        <input id="new-domain-input" type="text" placeholder="subdomain.example.com" class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-dark-700">
+        <button onclick="registerDomain()" class="px-4 py-2 bg-primary-500 text-white rounded-r-lg hover:bg-primary-600 transition-colors">
+          Add
+        </button>
+      </div>
+      <div id="container-domains" class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 max-h-60 overflow-y-auto">
+        <p class="text-center text-gray-500 dark:text-gray-400">Loading domains...</p>
+      </div>
+      <button onclick="toggleWildcardsWindow()" class="mt-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+        Close
+      </button>
+    </div>
+  </div>
 
+  <script>
+    // Shared
+    const rootDomain = "${serviceName}.${rootDomain}";
+    const notification = document.getElementById("notification-badge");
+    const windowContainer = document.getElementById("container-window");
+    const windowInfoContainer = document.getElementById("window-info-container");
+    const converterUrl = "${CONVERTER_URL}";
 
-      // Switches
-      let isDomainListFetched = false;
+    // Switches
+    let isDomainListFetched = false;
 
-      // Local variable
-      let rawConfig = "";
+    // Local variable
+    let rawConfig = "";
 
-      function getDomainList() {
-        if (isDomainListFetched) return;
-        isDomainListFetched = true;
+    function getDomainList() {
+      if (isDomainListFetched) return;
+      isDomainListFetched = true;
 
-        windowInfoContainer.innerText = "Fetching data...";
+      windowInfoContainer.innerText = "Fetching data...";
 
-        const url = "https://" + rootDomain + "/api/v1/domains/get";
-        const res = fetch(url).then(async (res) => {
-          const domainListContainer = document.getElementById("container-domains");
-          domainListContainer.innerHTML = "";
+      const url = "https://" + rootDomain + "/api/v1/domains/get";
+      const res = fetch(url).then(async (res) => {
+        const domainListContainer = document.getElementById("container-domains");
+        domainListContainer.innerHTML = "";
 
-          if (res.status == 200) {
-            windowInfoContainer.innerText = "Done!";
-            const respJson = await res.json();
-            for (const domain of respJson) {
-              const domainElement = document.createElement("p");
-              domainElement.classList.add("w-full", "bg-amber-400", "rounded-md");
-              domainElement.innerText = domain;
-              domainListContainer.appendChild(domainElement);
-            }
-          } else {
-            windowInfoContainer.innerText = "Failed!";
+        if (res.status == 200) {
+          windowInfoContainer.innerText = "Done!";
+          const respJson = await res.json();
+          for (const domain of respJson) {
+            const domainElement = document.createElement("p");
+            domainElement.classList.add("w-full", "bg-amber-400", "rounded-md");
+            domainElement.innerText = domain;
+            domainListContainer.appendChild(domainElement);
           }
-        });
-      }
-
-      function registerDomain() {
-        const domainInputElement = document.getElementById("new-domain-input");
-        const rawDomain = domainInputElement.value.toLowerCase();
-        const domain = domainInputElement.value + "." + rootDomain;
-
-        if (!rawDomain.match(/\\w+\\.\\w+$/) || rawDomain.endsWith(rootDomain)) {
-          windowInfoContainer.innerText = "Invalid URL!";
-          return;
+        } else {
+          windowInfoContainer.innerText = "Failed!";
         }
+      });
+    }
 
-        windowInfoContainer.innerText = "Pushing request...";
+    function registerDomain() {
+      const domainInputElement = document.getElementById("new-domain-input");
+      const rawDomain = domainInputElement.value.toLowerCase();
+      const domain = domainInputElement.value + "." + rootDomain;
 
-        const url = "https://" + rootDomain + "/api/v1/domains/put?domain=" + domain;
-        const res = fetch(url).then((res) => {
-          if (res.status == 200) {
-            windowInfoContainer.innerText = "Done!";
-            domainInputElement.value = "";
-            isDomainListFetched = false;
-            getDomainList();
+      if (!rawDomain.match(/\\w+\\.\\w+$/) || rawDomain.endsWith(rootDomain)) {
+        windowInfoContainer.innerText = "Invalid URL!";
+        return;
+      }
+
+      windowInfoContainer.innerText = "Pushing request...";
+
+      const url = "https://" + rootDomain + "/api/v1/domains/put?domain=" + domain;
+      const res = fetch(url).then((res) => {
+        if (res.status == 200) {
+          windowInfoContainer.innerText = "Done!";
+          domainInputElement.value = "";
+          isDomainListFetched = false;
+          getDomainList();
+        } else {
+          if (res.status == 409) {
+            windowInfoContainer.innerText = "Domain exists!";
           } else {
-            if (res.status == 409) {
-              windowInfoContainer.innerText = "Domain exists!";
-            } else {
-              windowInfoContainer.innerText = "Error " + res.status;
-            }
+            windowInfoContainer.innerText = "Error " + res.status;
           }
-        });
-      }
+        }
+      });
+    }
 
-      function copyToClipboard(text) {
-        toggleOutputWindow();
-        rawConfig = text;
-      }
+    function copyToClipboard(text) {
+      toggleOutputWindow();
+      rawConfig = text;
+    }
 
-      function copyToClipboardAsRaw() {
-        navigator.clipboard.writeText(rawConfig);
+    function copyToClipboardAsRaw() {
+      navigator.clipboard.writeText(rawConfig);
+
+      notification.classList.remove("opacity-0");
+      setTimeout(() => {
+        notification.classList.add("opacity-0");
+      }, 2000);
+    }
+
+    async function copyToClipboardAsTarget(target) {
+      windowInfoContainer.innerText = "Generating config...";
+      const url = "${CONVERTER_URL}";
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          url: rawConfig,
+          format: target,
+          template: "cf",
+        }),
+      });
+
+      if (res.status == 200) {
+        windowInfoContainer.innerText = "Done!";
+        navigator.clipboard.writeText(await res.text());
 
         notification.classList.remove("opacity-0");
         setTimeout(() => {
           notification.classList.add("opacity-0");
         }, 2000);
+      } else {
+        windowInfoContainer.innerText = "Error " + res.statusText;
       }
+    }
 
-      async function copyToClipboardAsTarget(target) {
-        windowInfoContainer.innerText = "Generating config...";
-        const url = "${CONVERTER_URL}";
-        const res = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify({
-            url: rawConfig,
-            format: target,
-            template: "cf",
-          }),
-        });
+    function navigateTo(link) {
+      window.location.href = link + window.location.search;
+    }
 
-        if (res.status == 200) {
-          windowInfoContainer.innerText = "Done!";
-          navigator.clipboard.writeText(await res.text());
+    function toggleOutputWindow() {
+      windowInfoContainer.innerText = "Select output:";
+      toggleWindow();
+      const rootElement = document.getElementById("output-window");
+      rootElement.classList.toggle("hidden");
+    }
 
-          notification.classList.remove("opacity-0");
-          setTimeout(() => {
-            notification.classList.add("opacity-0");
-          }, 2000);
+    function toggleWildcardsWindow() {
+      windowInfoContainer.innerText = "Domain list";
+      toggleWindow();
+      getDomainList();
+      const rootElement = document.getElementById("wildcards-window");
+      rootElement.classList.toggle("hidden");
+    }
+
+    function toggleWindow() {
+      if (windowContainer.classList.contains("hidden")) {
+        windowContainer.classList.remove("hidden");
+      } else {
+        windowContainer.classList.add("hidden");
+      }
+    }
+
+    function toggleDarkMode() {
+      const rootElement = document.getElementById("html");
+      if (rootElement.classList.contains("dark")) {
+        rootElement.classList.remove("dark");
+      } else {
+        rootElement.classList.add("dark");
+      }
+    }
+
+    function checkProxy() {
+      for (let i = 0; ; i++) {
+        const pingElement = document.getElementById("ping-"+i);
+        if (pingElement == undefined) return;
+
+        const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
+        if (target) {
+          pingElement.textContent = "Checking...";
         } else {
-          windowInfoContainer.innerText = "Error " + res.statusText;
+          continue;
         }
-      }
 
-      function navigateTo(link) {
-        window.location.href = link + window.location.search;
-      }
-
-      function toggleOutputWindow() {
-        windowInfoContainer.innerText = "Select output:";
-        toggleWindow();
-        const rootElement = document.getElementById("output-window");
-        if (rootElement.classList.contains("hidden")) {
-          rootElement.classList.remove("hidden");
-        } else {
-          rootElement.classList.add("hidden");
-        }
-      }
-
-      function toggleWildcardsWindow() {
-        windowInfoContainer.innerText = "Domain list";
-        toggleWindow();
-        getDomainList();
-        const rootElement = document.getElementById("wildcards-window");
-        if (rootElement.classList.contains("hidden")) {
-          rootElement.classList.remove("hidden");
-        } else {
-          rootElement.classList.add("hidden");
-        }
-      }
-
-      function toggleWindow() {
-        if (windowContainer.classList.contains("hidden")) {
-          windowContainer.classList.remove("hidden");
-        } else {
-          windowContainer.classList.add("hidden");
-        }
-      }
-
-      function toggleDarkMode() {
-        const rootElement = document.getElementById("html");
-        if (rootElement.classList.contains("dark")) {
-          rootElement.classList.remove("dark");
-        } else {
-          rootElement.classList.add("dark");
-        }
-      }
-
-      function checkProxy() {
-        for (let i = 0; ; i++) {
-          const pingElement = document.getElementById("ping-"+i);
-          if (pingElement == undefined) return;
-
-          const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
-          if (target) {
-            pingElement.textContent = "Checking...";
-          } else {
-            continue;
-          }
-
-          let isActive = false;
-          // Check dengan ID1
-          new Promise(async (resolve) => {
-            const res = await fetch("https://id1.foolvpn.me/api/v1/check?ip=" + target)
-              .then(async (res) => {
-                if (isActive) return;
-                if (res.status == 200) {
-                  pingElement.classList.remove("dark:text-white");
-                  const jsonResp = await res.json();
-                  if (jsonResp.proxyip === true) {
-                    isActive = true;
-                    pingElement.textContent = "ID1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
-                    pingElement.classList.add("text-green-600");
-                  } else {
-                    pingElement.textContent = "ID1: Inactive";
-                    pingElement.classList.add("text-red-600");
-                  }
+        let isActive = false;
+        // Check dengan ID1
+        new Promise(async (resolve) => {
+          const res = await fetch("https://id1.foolvpn.me/api/v1/check?ip=" + target)
+            .then(async (res) => {
+              if (isActive) return;
+              if (res.status == 200) {
+                pingElement.classList.remove("dark:text-white");
+                const jsonResp = await res.json();
+                if (jsonResp.proxyip === true) {
+                  isActive = true;
+                  pingElement.textContent = "ID1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
+                  pingElement.classList.add("text-green-600");
                 } else {
-                  pingElement.textContent = "ID1: Check Failed!";
+                  pingElement.textContent = "ID1: Inactive";
+                  pingElement.classList.add("text-red-600");
                 }
-              })
-              .finally(() => {
-                resolve(0);
-              });
-          });
-
-          // Check dengan SG1
-          new Promise(async (resolve) => {
-            const res = await fetch("https://sg1.foolvpn.me/api/v1/check?ip=" + target)
-              .then(async (res) => {
-                if (res.status == 200) {
-                  const jsonResp = await res.json();
-                  if (jsonResp.proxyip === true) {
-                    const id2Status = document.createElement("div");
-                    id2Status.textContent = "SG1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
-                    id2Status.classList.add("text-green-600", "text-xs", "font-semibold");
-                    pingElement.parentNode.appendChild(id2Status);
-                  } else {
-                    const id2Status = document.createElement("div"); 
-                    id2Status.textContent = "SG1: Inactive";
-                    id2Status.classList.add("text-red-600", "text-xs", "font-semibold");
-                    pingElement.parentNode.appendChild(id2Status);
-                  }
-                }
-              })
-              .finally(() => {
-                resolve(0);
-              });
-          });
-        }
-      }
-
-      function checkRegion() {
-        for (let i = 0; ; i++) {
-          console.log("Halo " + i)
-          const containerRegionCheck = document.getElementById("container-region-check-" + i);
-          const configSample = document.getElementById("config-sample-" + i).value.replaceAll(" ", "");
-          if (containerRegionCheck == undefined) break;
-
-          const res = fetch(
-            "https://api.foolvpn.me/regioncheck?config=" + encodeURIComponent(configSample)
-          ).then(async (res) => {
-            if (res.status == 200) {
-              containerRegionCheck.innerHTML = "<hr>";
-              for (const result of await res.json()) {
-                containerRegionCheck.innerHTML += "<p>" + result.name + ": " + result.region + "</p>";
+              } else {
+                pingElement.textContent = "ID1: Check Failed!";
               }
-            }
-          });
-        }
-      }
+            })
+            .finally(() => {
+              resolve(0);
+            });
+        });
 
-      function checkGeoip() {
-        const containerIP = document.getElementById("container-info-ip");
-        const containerCountry = document.getElementById("container-info-country");
-        const containerISP = document.getElementById("container-info-isp");
-        const res = fetch("https://" + rootDomain + "/api/v1/myip").then(async (res) => {
+        // Check dengan SG1
+        new Promise(async (resolve) => {
+          const res = await fetch("https://sg1.foolvpn.me/api/v1/check?ip=" + target)
+            .then(async (res) => {
+              if (res.status == 200) {
+                const jsonResp = await res.json();
+                if (jsonResp.proxyip === true) {
+                  const id2Status = document.createElement("div");
+                  id2Status.textContent = "SG1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
+                  id2Status.classList.add("text-green-600", "text-xs", "font-semibold");
+                  pingElement.parentNode.appendChild(id2Status);
+                } else {
+                  const id2Status = document.createElement("div"); 
+                  id2Status.textContent = "SG1: Inactive";
+                  id2Status.classList.add("text-red-600", "text-xs", "font-semibold");
+                  pingElement.parentNode.appendChild(id2Status);
+                }
+              }
+            })
+            .finally(() => {
+              resolve(0);
+            });
+        });
+      }
+    }
+
+    function checkRegion() {
+      for (let i = 0; ; i++) {
+        console.log("Halo " + i)
+        const containerRegionCheck = document.getElementById("container-region-check-" + i);
+        const configSample = document.getElementById("config-sample-" + i).value.replaceAll(" ", "");
+        if (containerRegionCheck == undefined) break;
+
+        const res = fetch(
+          "https://api.foolvpn.me/regioncheck?config=" + encodeURIComponent(configSample)
+        ).then(async (res) => {
           if (res.status == 200) {
-            const respJson = await res.json();
-            containerIP.innerText = "IP: " + respJson.ip;
-            containerCountry.innerText = "Country: " + respJson.country;
-            containerISP.innerText = "ISP: " + respJson.asOrganization;
+            containerRegionCheck.innerHTML = "<hr>";
+            for (const result of await res.json()) {
+              containerRegionCheck.innerHTML += "<p>" + result.name + ": " + result.region + "</p>";
+            }
           }
         });
       }
+    }
 
-      window.onload = () => {
-        checkGeoip();
-        checkProxy();
-        // checkRegion();
-
-        const observer = lozad(".lozad", {
-          load: function (el) {
-            el.classList.remove("scale-95");
-          },
-        });
-        observer.observe();
-      };
-
-      window.onscroll = () => {
-        const paginationContainer = document.getElementById("container-pagination");
-
-        if (window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight) {
-          paginationContainer.classList.remove("-translate-y-6");
-        } else {
-          paginationContainer.classList.add("-translate-y-6");
+    function checkGeoip() {
+      const containerIP = document.getElementById("container-info-ip");
+      const containerCountry = document.getElementById("container-info-country");
+      const containerISP = document.getElementById("container-info-isp");
+      const res = fetch("https://" + rootDomain + "/api/v1/myip").then(async (res) => {
+        if (res.status == 200) {
+          const respJson = await res.json();
+          containerIP.innerText = "IP: " + respJson.ip;
+          containerCountry.innerText = "Country: " + respJson.country;
+          containerISP.innerText = "ISP: " + respJson.asOrganization;
         }
-      };
-    </script>
-    </body>
+      });
+    }
 
+    window.onload = () => {
+      checkGeoip();
+      checkProxy();
+      // checkRegion();
+
+      const observer = lozad(".lozad", {
+        load: function (el) {
+          el.classList.remove("scale-95");
+        },
+      });
+      observer.observe();
+
+      // Scroll to active flag if cc param exists
+      const urlParams = new URLSearchParams(window.location.search);
+      const cc = urlParams.get("cc");
+      if (cc) {
+        setTimeout(() => {
+          const flagEl = document.querySelector(\`a[data-cc="\${cc}"]\`);
+          if (flagEl) {
+            flagEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            flagEl.classList.add("ring-4", "ring-blue-400");
+          }
+        }, 200);
+      }
+    };
+
+    window.onscroll = () => {
+      const paginationContainer = document.getElementById("container-pagination");
+
+      if (window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight) {
+        paginationContainer.classList.remove("-translate-y-6");
+      } else {
+        paginationContainer.classList.add("-translate-y-6");
+      }
+    };
+  </script>
+  </body>
 </html>
 `;
 
 class Document {
+  async handleRequest(request) {
+    const doc = new Document(request);
+    doc.setTitle("My Proxy List");
+    doc.addInfo("Welcome to the proxy list page");
+    
+    // Sample proxy data
+    const sampleProxies = [
+      {
+        country: "ID",
+        org: "Indonesian Proxy",
+        proxyIP: "192.0.2.1",
+        proxyPort: "8080",
+        list: [
+          "server1.example.com:8080",
+          "server2.example.com:8081",
+          "server3.example.com:8082",
+          "server4.example.com:8083"
+        ]
+      },
+      {
+        country: "US",
+        org: "American Proxy",
+        proxyIP: "198.51.100.1",
+        proxyPort: "3128",
+        list: [
+          "proxy1.usa.com:3128",
+          "proxy2.usa.com:8888"
+        ]
+      }
+    ];
+    
+    sampleProxies.forEach(proxy => doc.registerProxies(proxy));
+    doc.addPageButton("Next", "/next-page", false);
+    doc.addPageButton("Prev", "/prev-page", true);
+    
+    return new Response(doc.build(), {
+      headers: { "content-type": "text/html;charset=UTF-8" }
+    });
+  }
   proxies = [];
 
   constructor(request) {
@@ -1617,27 +1602,32 @@ class Document {
 
   buildProxyGroup() {
     let proxyGroupElement = "";
-    proxyGroupElement += `<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">`;
     for (let i = 0; i < this.proxies.length; i++) {
       const proxyData = this.proxies[i];
-
-      // Assign proxies
-      proxyGroupElement += `<div class="lozad scale-95 mb-2 bg-white dark:bg-neutral-800 transition-transform duration-200 rounded-lg p-4 w-60 border-2 border-neutral-800">`;
-      proxyGroupElement += `  <div id="countryFlag" class="absolute -translate-y-9 -translate-x-2 border-2 border-neutral-800 rounded-full overflow-hidden"><img width="32" src="https://hatscripts.github.io/circle-flags/flags/${proxyData.country.toLowerCase()}.svg" /></div>`;
-      proxyGroupElement += `  <div>`;
-      proxyGroupElement += `    <div id="ping-${i}" class="animate-pulse text-xs font-semibold dark:text-white">Idle ${proxyData.proxyIP}:${proxyData.proxyPort}</div>`;
-      proxyGroupElement += `  </div>`;
-      proxyGroupElement += `  <div class="rounded py-1 px-2 bg-amber-400 dark:bg-neutral-800 dark:border-2 dark:border-amber-400">`;
-      proxyGroupElement += `    <h5 class="font-bold text-md text-neutral-900 dark:text-white mb-1 overflow-x-scroll scrollbar-hide text-nowrap">${proxyData.org}</h5>`;
-      proxyGroupElement += `    <div class="text-neutral-900 dark:text-white text-sm">`;
-      proxyGroupElement += `      <p>IP: ${proxyData.proxyIP}</p>`;
-      proxyGroupElement += `      <p>Port: ${proxyData.proxyPort}</p>`;
-      proxyGroupElement += `      <div id="container-region-check-${i}">`;
-      proxyGroupElement += `        <input id="config-sample-${i}" class="hidden" type="text" value="${proxyData.list[0]}">`;
-      proxyGroupElement += `      </div>`;
-      proxyGroupElement += `    </div>`;
-      proxyGroupElement += `  </div>`;
-      proxyGroupElement += `  <div class="flex flex-col gap-2 mt-3 text-sm">`;
+      
+      proxyGroupElement += `
+      <div class="card-hover bg-white dark:bg-dark-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 animate-fade-in" style="animation-delay: ${i * 50}ms">
+        <div class="flex items-center gap-3 mb-4">
+          <img width="24" src="https://hatscripts.github.io/circle-flags/flags/${proxyData.country.toLowerCase()}.svg" class="rounded-full border border-gray-200 dark:border-gray-600">
+          <div>
+            <div id="ping-${i}" class="text-xs font-medium text-gray-500 dark:text-gray-400 animate-pulse">Checking ${proxyData.proxyIP}:${proxyData.proxyPort}</div>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-1 truncate">${proxyData.org}</h3>
+          <div class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+            <p>IP: <span class="font-mono">${proxyData.proxyIP}</span></p>
+            <p>Port: <span class="font-mono">${proxyData.proxyPort}</span></p>
+            <div id="container-region-check-${i}">
+              <input id="config-sample-${i}" class="hidden" type="text" value="${proxyData.list[0]}">
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2">
+      `;
+      
       for (let x = 0; x < proxyData.list.length; x++) {
         const indexName = [
           `${reverse("NAJORT")} TLS`,
@@ -1648,25 +1638,23 @@ class Document {
           `${reverse("SS")} NTLS`,
         ];
         const proxy = proxyData.list[x];
-
-        if (x % 2 == 0) {
-          proxyGroupElement += `<div class="flex gap-2 justify-around w-full">`;
-        }
-
-        proxyGroupElement += `<button class="bg-blue-500 dark:bg-neutral-800 dark:border-2 dark:border-blue-500 rounded p-1 w-full text-white" onclick="copyToClipboard('${proxy}')">${indexName[x]}</button>`;
-
-        if (x % 2 == 1) {
-          proxyGroupElement += `</div>`;
-        }
+        
+        proxyGroupElement += `
+          <button onclick="copyToClipboard('${proxy.replace(/'/g, "\\'")}')" class="text-sm px-3 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors">
+            ${indexName[x]}
+          </button>
+        `;
       }
-      proxyGroupElement += `  </div>`;
-      proxyGroupElement += `</div>`;
+      
+      proxyGroupElement += `
+        </div>
+      </div>
+      `;
     }
-    proxyGroupElement += `</div>`;
-
-    this.html = this.html.replaceAll("PLACEHOLDER_PROXY_GROUP", `${proxyGroupElement}`);
+    
+    this.html = this.html.replaceAll("PLACEHOLDER_PROXY_GROUP", proxyGroupElement);
   }
-
+  
   buildCountryFlag() {
     const proxyBankUrl = this.url.searchParams.get("proxy-list");
     const flagList = [];
@@ -1678,7 +1666,7 @@ class Document {
     for (const flag of new Set(flagList)) {
       flagElement += `<a href="/sub?cc=${flag}${
         proxyBankUrl ? "&proxy-list=" + proxyBankUrl : ""
-      }" class="py-1" ><img width=20 src="https://hatscripts.github.io/circle-flags/flags/${flag.toLowerCase()}.svg" /></a>`;
+      }" data-cc="${flag}" title="${flag}" class="block my-1 transition-transform hover:scale-110"><img width="32" height="32" src="https://hatscripts.github.io/circle-flags/flags/${flag.toLowerCase()}.svg" class="rounded-full border border-gray-300 dark:border-gray-600 shadow" /></a>`;
     }
 
     this.html = this.html.replaceAll("PLACEHOLDER_BENDERA_NEGARA", flagElement);

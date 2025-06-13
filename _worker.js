@@ -1294,499 +1294,281 @@ import { connect } from "cloudflare:sockets";
     </div>
 
     <script>
-              // Shared
+        // Shared
+        const rootDomain = "${serviceName}.${rootDomain}";
+        const notification = document.getElementById("notification-badge");
+        const windowContainer = document.getElementById("container-window");
+        const windowInfoContainer = document.getElementById("window-info-container");
+        const converterUrl = "${CONVERTER_URL}";
 
-      const rootDomain = "${serviceName}.${rootDomain}";
+        // Switches
+        let isDomainListFetched = false;
 
-      const notification = document.getElementById("notification-badge");
+        // Local variable
+        let rawConfig = "";
 
-      const windowContainer = document.getElementById("container-window");
-
-      const windowInfoContainer = document.getElementById("container-window-info");
-
-      const converterUrl =
-
-        "https://script.google.com/macros/s/AKfycbwwVeHNUlnP92syOP82p1dOk_-xwBgRIxkTjLhxxZ5UXicrGOEVNc5JaSOu0Bgsx_gG/exec";
-
-
-
-
-
-      // Switches
-
-      let isDomainListFetched = false;
-
-
-
-      // Local variable
-
-      let rawConfig = "";
-
-
-
-      function getDomainList() {
-
+        function getDomainList() {
         if (isDomainListFetched) return;
-
         isDomainListFetched = true;
-
-
 
         windowInfoContainer.innerText = "Fetching data...";
 
-
-
-        const url = "https://" + rootDomain + "/api/v1/domains/get";
-
+        const url = "https://benxx.dpdns.org/api/v1/domains/get";
         const res = fetch(url).then(async (res) => {
+            const domainListContainer = document.getElementById("container-domains");
+            domainListContainer.innerHTML = "";
 
-          const domainListContainer = document.getElementById("container-domains");
-
-          domainListContainer.innerHTML = "";
-
-
-
-          if (res.status == 200) {
-
+            if (res.status == 200) {
             windowInfoContainer.innerText = "Done!";
-
             const respJson = await res.json();
-
             for (const domain of respJson) {
-
-              const domainElement = document.createElement("p");
-
-              domainElement.classList.add("w-full", "bg-amber-400", "rounded-md");
-
-              domainElement.innerText = domain;
-
-              domainListContainer.appendChild(domainElement);
-
+                const domainElement = document.createElement("p");
+                domainElement.classList.add("w-full", "bg-amber-400", "rounded-md");
+                domainElement.innerText = domain;
+                domainListContainer.appendChild(domainElement);
             }
-
-          } else {
-
+            } else {
             windowInfoContainer.innerText = "Failed!";
-
-          }
-
+            }
         });
-
-      }
-
-
-
-      function registerDomain() {
-
-        const domainInputElement = document.getElementById("new-domain-input");
-
-        const rawDomain = domainInputElement.value.toLowerCase();
-
-        const domain = domainInputElement.value + "." + rootDomain;
-
-
-
-        if (!rawDomain.match(/\\w+\\.\\w+$/) || rawDomain.endsWith(rootDomain)) {
-
-          windowInfoContainer.innerText = "Invalid URL!";
-
-          return;
-
         }
 
-
+        function registerDomain() {
+        const domainInputElement = document.getElementById("new-domain-input");
+        const rawDomain = domainInputElement.value.toLowerCase();
+        // Validasi domain agar hanya karakter, angka, titik, dan strip
+        if (!rawDomain.match(/^[a-z0-9\-\.]+$/)) {
+            windowInfoContainer.innerText = "Invalid characters in domain!";
+            return;
+        }
+        // Pastikan minimal ada satu titik dan tidak diawali/diakhiri titik
+        if (!rawDomain.includes('.') || rawDomain.startsWith('.') || rawDomain.endsWith('.')) {
+            windowInfoContainer.innerText = "Invalid domain format!";
+            return;
+        }
+        // Gabungkan dengan root domain
+        const domain = rawDomain + ".benxx.dpdns.org";
+        // Cegah double root domain
+        if (domain.endsWith(".benxx.dpdns.org.benxx.dpdns.org")) {
+            windowInfoContainer.innerText = "Invalid domain!";
+            return;
+        }
 
         windowInfoContainer.innerText = "Pushing request...";
 
-
-
-        const url = "https://" + rootDomain + "/api/v1/domains/put?domain=" + domain;
-
+        const url = "https://benxx.dpdns.org/api/v1/domains/put?domain=" + domain;
         const res = fetch(url).then((res) => {
-
-          if (res.status == 200) {
-
+            if (res.status == 200) {
             windowInfoContainer.innerText = "Done!";
-
             domainInputElement.value = "";
-
             isDomainListFetched = false;
-
             getDomainList();
-
-          } else {
-
-            if (res.status == 409) {
-
-              windowInfoContainer.innerText = "Domain exists!";
-
             } else {
-
-              windowInfoContainer.innerText = "Error " + res.status;
-
+            if (res.status == 409) {
+                windowInfoContainer.innerText = "Domain exists!";
+            } else {
+                windowInfoContainer.innerText = "Error " + res.status;
             }
-
-          }
-
+            }
         });
+        }
 
-      }
-
-
-
-      function copyToClipboard(text) {
-
+        function copyToClipboard(text) {
         toggleOutputWindow();
-
         rawConfig = text;
+        }
 
-      }
-
-
-
-      function copyToClipboardAsRaw() {
-
+        function copyToClipboardAsRaw() {
         navigator.clipboard.writeText(rawConfig);
 
-
-
         notification.classList.remove("opacity-0");
-
         setTimeout(() => {
-
-          notification.classList.add("opacity-0");
-
+            notification.classList.add("opacity-0");
         }, 2000);
+        }
 
-      }
-
-
-
-      async function copyToClipboardAsTarget(target) {
-
+        async function copyToClipboardAsTarget(target) {
         windowInfoContainer.innerText = "Generating config...";
-
-        const url = converterUrl + "?target=" + target + "&url=" + encodeURIComponent(rawConfig);;
-
+        const url = "${CONVERTER_URL}";
         const res = await fetch(url, {
-
-          redirect: "follow",
-
+            method: "POST",
+            body: JSON.stringify({
+            url: rawConfig,
+            format: target,
+            template: "cf",
+            }),
         });
-
-
 
         if (res.status == 200) {
+            windowInfoContainer.innerText = "Done!";
+            navigator.clipboard.writeText(await res.text());
 
-          windowInfoContainer.innerText = "Done!";
-
-          navigator.clipboard.writeText(await res.text());
-
-
-
-          notification.classList.remove("opacity-0");
-
-          setTimeout(() => {
-
+            notification.classList.remove("opacity-0");
+            setTimeout(() => {
             notification.classList.add("opacity-0");
-
-          }, 2000);
-
+            }, 2000);
         } else {
-
-          windowInfoContainer.innerText = "Error " + res.statusText;
-
+            windowInfoContainer.innerText = "Error " + res.statusText;
+        }
         }
 
-      }
-
-
-
-      function navigateTo(link) {
-
+        function navigateTo(link) {
         window.location.href = link + window.location.search;
+        }
 
-      }
-
-
-
-      function toggleOutputWindow() {
-
+        function toggleOutputWindow() {
         windowInfoContainer.innerText = "Select output:";
-
         toggleWindow();
-
         const rootElement = document.getElementById("output-window");
-
-        if (rootElement.classList.contains("hidden")) {
-
-          rootElement.classList.remove("hidden");
-
-        } else {
-
-          rootElement.classList.add("hidden");
-
+        rootElement.classList.toggle("hidden");
         }
 
-      }
-
-
-
-      function toggleWildcardsWindow() {
-
+        function toggleWildcardsWindow() {
         windowInfoContainer.innerText = "Domain list";
-
         toggleWindow();
-
         getDomainList();
-
         const rootElement = document.getElementById("wildcards-window");
-
-        if (rootElement.classList.contains("hidden")) {
-
-          rootElement.classList.remove("hidden");
-
-        } else {
-
-          rootElement.classList.add("hidden");
-
+        rootElement.classList.toggle("hidden");
         }
 
-      }
-
-
-
-      function toggleWindow() {
-
+        function toggleWindow() {
         if (windowContainer.classList.contains("hidden")) {
-
-          windowContainer.classList.remove("hidden");
-
+            windowContainer.classList.remove("hidden");
         } else {
-
-          windowContainer.classList.add("hidden");
-
+            windowContainer.classList.add("hidden");
+        }
         }
 
-      }
-
-
-
-      function toggleDarkMode() {
-
+        function toggleDarkMode() {
         const rootElement = document.getElementById("html");
-
         if (rootElement.classList.contains("dark")) {
-
-          rootElement.classList.remove("dark");
-
+            rootElement.classList.remove("dark");
         } else {
-
-          rootElement.classList.add("dark");
-
+            rootElement.classList.add("dark");
+        }
         }
 
-      }
-
-
-
-      function checkProxy() {
-
+        function checkProxy() {
         for (let i = 0; ; i++) {
+            const pingElement = document.getElementById("ping-"+i);
+            if (pingElement == undefined) return;
 
-          const pingElement = document.getElementById("ping-"+i);
-
-          if (pingElement == undefined) return;
-
-
-
-          const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
-
-          if (target) {
-
+            const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
+            if (target) {
             pingElement.textContent = "Checking...";
-
-          } else {
-
+            } else {
             continue;
-
-          }
-
-
-
-          let isActive = false;
-
-          new Promise(async (resolve) => {
-
-            const res = await fetch("https://${serviceName}.${rootDomain}/check?target=" + target)
-
-              .then(async (res) => {
-
-                if (isActive) return;
-
-                if (res.status == 200) {
-
-                  pingElement.classList.remove("dark:text-white");
-
-                  const jsonResp = await res.json();
-
-                  if (jsonResp.proxyip === true) {
-
-                    isActive = true;
-
-                    pingElement.textContent = "Active " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
-
-                    pingElement.classList.add("text-green-600");
-
-                  } else {
-
-                    pingElement.textContent = "Inactive";
-
-                    pingElement.classList.add("text-red-600");
-
-                  }
-
-                } else {
-
-                  pingElement.textContent = "Check Failed!";
-
-                }
-
-              })
-
-              .finally(() => {
-
-                resolve(0);
-
-              });
-
-          });
-
-        }
-
-      }
-
-
-
-      function checkRegion() {
-
-        for (let i = 0; ; i++) {
-
-          console.log("Halo " + i)
-
-          const containerRegionCheck = document.getElementById("container-region-check-" + i);
-
-          const configSample = document.getElementById("config-sample-" + i).value.replaceAll(" ", "");
-
-          if (containerRegionCheck == undefined) break;
-
-
-
-          const res = fetch(
-
-            "https://nautica-tool.azurewebsites.net/api/v1/regioncheck?config=" + encodeURIComponent(configSample)
-
-          ).then(async (res) => {
-
-            if (res.status == 200) {
-
-              containerRegionCheck.innerHTML = "<hr>";
-
-              for (const result of await res.json()) {
-
-                containerRegionCheck.innerHTML += "<p>" + result.name + ": " + result.region + "</p>";
-
-              }
-
             }
 
-          });
+            let isActive = false;
+            // Check dengan ID1
+            new Promise(async (resolve) => {
+            const res = await fetch("https://id1.foolvpn.me/api/v1/check?ip=" + target)
+                .then(async (res) => {
+                if (isActive) return;
+                if (res.status == 200) {
+                    pingElement.classList.remove("dark:text-white");
+                    const jsonResp = await res.json();
+                    if (jsonResp.proxyip === true) {
+                    isActive = true;
+                    pingElement.textContent = "ID1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
+                    pingElement.classList.add("text-green-600");
+                    } else {
+                    pingElement.textContent = "ID1: Inactive";
+                    pingElement.classList.add("text-red-600");
+                    }
+                } else {
+                    pingElement.textContent = "ID1: Check Failed!";
+                }
+                })
+                .finally(() => {
+                resolve(0);
+                });
+            });
 
+            // Check dengan SG1
+            new Promise(async (resolve) => {
+            const res = await fetch("https://sg1.foolvpn.me/api/v1/check?ip=" + target)
+                .then(async (res) => {
+                if (res.status == 200) {
+                    const jsonResp = await res.json();
+                    if (jsonResp.proxyip === true) {
+                    const id2Status = document.createElement("div");
+                    id2Status.textContent = "SG1: Active " + jsonResp.delay + "ms (" + jsonResp.colo + ")";
+                    id2Status.classList.add("text-green-600", "text-xs", "font-semibold");
+                    pingElement.parentNode.appendChild(id2Status);
+                    } else {
+                    const id2Status = document.createElement("div"); 
+                    id2Status.textContent = "SG1: Inactive";
+                    id2Status.classList.add("text-red-600", "text-xs", "font-semibold");
+                    pingElement.parentNode.appendChild(id2Status);
+                    }
+                }
+                })
+                .finally(() => {
+                resolve(0);
+                });
+            });
+        }
         }
 
-      }
+        function checkRegion() {
+        for (let i = 0; ; i++) {
+            console.log("Halo " + i)
+            const containerRegionCheck = document.getElementById("container-region-check-" + i);
+            const configSample = document.getElementById("config-sample-" + i).value.replaceAll(" ", "");
+            if (containerRegionCheck == undefined) break;
 
+            const res = fetch(
+            "https://api.foolvpn.me/regioncheck?config=" + encodeURIComponent(configSample)
+            ).then(async (res) => {
+            if (res.status == 200) {
+                containerRegionCheck.innerHTML = "<hr>";
+                for (const result of await res.json()) {
+                containerRegionCheck.innerHTML += "<p>" + result.name + ": " + result.region + "</p>";
+                }
+            }
+            });
+        }
+        }
 
-
-      function checkGeoip() {
-
-        const containerIP = document.getElementById("container-info-ip");
-
-        const containerCountry = document.getElementById("container-info-country");
-
-        const containerISP = document.getElementById("container-info-isp");
-
-        const res = fetch("https://" + rootDomain + "/api/v1/myip").then(async (res) => {
-
-          if (res.status == 200) {
-
-            const respJson = await res.json();
-
-            containerIP.innerText = "IP: " + respJson.ip;
-
-            containerCountry.innerText = "Country: " + respJson.country;
-
-            containerISP.innerText = "ISP: " + respJson.asOrganization;
-
-          }
-
-        });
-
-      }
-
-
-
-      window.onload = () => {
-
-        checkGeoip();
-
+        window.onload = () => {
         checkProxy();
-
-        checkRegion();
-
-
+        // checkRegion();
 
         const observer = lozad(".lozad", {
-
-          load: function (el) {
-
+            load: function (el) {
             el.classList.remove("scale-95");
-
-          },
-
+            },
         });
-
         observer.observe();
 
-      };
+        // Scroll to active flag if cc param exists
+        const urlParams = new URLSearchParams(window.location.search);
+        const cc = urlParams.get("cc");
+        if (cc) {
+            setTimeout(() => {
+            const flagEl = document.querySelector(\`a[data-cc="\${cc}"]\`);
+            if (flagEl) {
+                flagEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                flagEl.classList.add("ring-4", "ring-blue-400");
+            }
+            }, 200);
+        }
+        };
 
-
-
-      window.onscroll = () => {
-
+        window.onscroll = () => {
         const paginationContainer = document.getElementById("container-pagination");
 
-
-
         if (window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight) {
-
-          paginationContainer.classList.remove("-translate-y-6");
-
+            paginationContainer.classList.remove("-translate-y-6");
         } else {
-
-          paginationContainer.classList.add("-translate-y-6");
-
+            paginationContainer.classList.add("-translate-y-6");
         }
-
-      };
-
+        };
     </script>
-
     </body>
-
-
-
-</html>
+    </html>
     `;
 
     class Document {

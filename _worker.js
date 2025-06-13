@@ -1265,11 +1265,8 @@ import { connect } from "cloudflare:sockets";
             <button onclick="copyToClipboardAsTarget('bfr')" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
             BFR
             </button>
-            <button onclick="copyToClipboardAsTarget('v2ray')" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
-            V2Ray
-            </button>
             <button onclick="copyToClipboardAsRaw()" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors col-span-2">
-            Raw Config
+            Raw Config v2ray
             </button>
         </div>
         <button onclick="toggleOutputWindow()" class="mt-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -1316,7 +1313,7 @@ import { connect } from "cloudflare:sockets";
 
         windowInfoContainer.innerText = "Fetching data...";
 
-        const url = "https://napirgasukaloli.my.id/api/v1/domains/get";
+        const url = "https://benxx.dpdns.org/api/v1/domains/get";
         const res = fetch(url).then(async (res) => {
             const domainListContainer = document.getElementById("container-domains");
             domainListContainer.innerHTML = "";
@@ -1350,16 +1347,16 @@ import { connect } from "cloudflare:sockets";
             return;
         }
         // Gabungkan dengan root domain
-        const domain = rawDomain + ".napirgasukaloli.my.id";
+        const domain = rawDomain + ".benxx.dpdns.org";
         // Cegah double root domain
-        if (domain.endsWith(".napirgasukaloli.my.id.napirgasukaloli.my.id")) {
+        if (domain.endsWith(".benxx.dpdns.org.benxx.dpdns.org")) {
             windowInfoContainer.innerText = "Invalid domain!";
             return;
         }
 
         windowInfoContainer.innerText = "Pushing request...";
 
-        const url = "https://napirgasukaloli.my.id/api/v1/domains/put?domain=" + domain;
+        const url = "https://benxx.dpdns.org/api/v1/domains/put?domain=" + domain;
         const res = fetch(url).then((res) => {
             if (res.status == 200) {
             windowInfoContainer.innerText = "Done!";

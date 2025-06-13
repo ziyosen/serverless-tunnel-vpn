@@ -3,12 +3,12 @@ import { connect } from "cloudflare:sockets";
     // import { Buffer } from "node:buffer";
 
     // Variables
-    const rootDomain = "napirgasukaloli.my.id"; // Ganti dengan domain utama kalian
-    const serviceName = "nautica"; // Ganti dengan nama workers kalian
-    const apiKey = ""; // Ganti dengan Global API key kalian (https://dash.cloudflare.com/profile/api-tokens)
-    const apiEmail = ""; // Ganti dengan email yang kalian gunakan
-    const accountID = ""; // Ganti dengan Account ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
-    const zoneID = ""; // Ganti dengan Zone ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
+    const rootDomain = "benxx.dpdns.org"; // Ganti dengan domain utama kalian
+    const serviceName = "thefool-vpn"; // Ganti dengan nama workers kalian
+    const apiKey = "1a442910de0267331d4ca5c808559e23f893f"; // Ganti dengan Global API key kalian (https://dash.cloudflare.com/profile/api-tokens)
+    const apiEmail = "ziyosenstore@gmail.com"; // Ganti dengan email yang kalian gunakan
+    const accountID = "ea1aab81dc8e22018131832d124a54fc"; // Ganti dengan Account ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
+    const zoneID = "9681155dacab3597f91c060a3862362c"; // Ganti dengan Zone ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
     let isApiReady = false;
     let proxyIP = "";
     let cachedProxyList = [];
@@ -18,12 +18,12 @@ import { connect } from "cloudflare:sockets";
     const PORTS = [443, 80];
     const PROTOCOLS = [reverse("najort"), reverse("sselv"), reverse("ss")];
     const KV_PROXY_URL = "https://raw.githubusercontent.com/FoolVPN-ID/Nautica/refs/heads/main/kvProxyList.json";
-    const PROXY_BANK_URL = "https://raw.githubusercontent.com/FoolVPN-ID/Nautica/refs/heads/main/proxyList.txt";
+    const PROXY_BANK_URL = "https://raw.githubusercontent.com/h58fmb0344g9h3/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5";
     const DNS_SERVER_ADDRESS = "8.8.8.8";
     const DNS_SERVER_PORT = 53;
     const PROXY_HEALTH_CHECK_API = "https://id1.foolvpn.me/api/v1/check";
     const CONVERTER_URL = "https://api.foolvpn.me/convert";
-    const DONATE_LINK = "https://trakteer.id/dickymuliafiqri/tip";
+    const DONATE_LINK = "https://saweria.co/ziyosen";
     const BAD_WORDS_LIST =
     "https://gist.githubusercontent.com/adierebel/a69396d79b787b84d89b45002cb37cd6/raw/6df5f8728b18699496ad588b3953931078ab9cf1/kata-kasar.txt";
     const PROXY_PER_PAGE = 24;
@@ -119,7 +119,7 @@ import { connect } from "cloudflare:sockets";
         // Build HTML
         const document = new Document(request);
         document.setTitle(
-          "Welcome to <span class='text-blue-500 font-extrabold drop-shadow-lg animate-fade-in' style='animation-duration:1s;animation-delay:0.1s;display:inline-block;font-size:2.5rem;font-family:Montserrat,Inter,sans-serif;'>Nautica</span>"
+          "Welcome to <span class='text-blue-500 font-extrabold drop-shadow-lg animate-fade-in' style='animation-duration:1s;animation-delay:0.1s;display:inline-block;font-size:2.5rem;font-family:Montserrat,Inter,sans-serif;'>benxx-project</span>"
         );
 
         // Info styling - gunakan font besar, bold, dan spacing

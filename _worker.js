@@ -24,8 +24,6 @@ import { connect } from "cloudflare:sockets";
     const PROXY_HEALTH_CHECK_API = "https://id1.foolvpn.me/api/v1/check";
     const CONVERTER_URL = "https://api.foolvpn.me/convert";
     const DONATE_LINK = "https://saweria.co/ziyosen";
-    const BAD_WORDS_LIST =
-    "https://gist.githubusercontent.com/adierebel/a69396d79b787b84d89b45002cb37cd6/raw/6df5f8728b18699496ad588b3953931078ab9cf1/kata-kasar.txt";
     const PROXY_PER_PAGE = 24;
     const WS_READY_STATE_OPEN = 1;
     const WS_READY_STATE_CLOSING = 2;

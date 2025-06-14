@@ -1121,12 +1121,6 @@ import { connect } from "cloudflare:sockets";
     <!DOCTYPE html>
     <html lang="en" id="html" class="dark">
     <head>
-    
-    <!-- Open Graph Meta Tags untuk SEO Media Sosial -->
-    <meta property="og:image" content="https://kere.us.kg/img/botvpn.jpg"> <!-- Ganti dengan URL gambar yang sesuai -->
-    <meta property="og:url" content="https://kere.us.kg/img/botvpn.jpg">
-    <meta property="og:type" content="website">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxy List</title>

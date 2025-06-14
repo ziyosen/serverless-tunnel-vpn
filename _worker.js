@@ -24,6 +24,7 @@ import { connect } from "cloudflare:sockets";
     const PROXY_HEALTH_CHECK_API = "https://id1.foolvpn.me/api/v1/check";
     const CONVERTER_URL = "https://api.foolvpn.me/convert";
     const DONATE_LINK = "https://saweria.co/ziyosen";
+    const TELEGRAM_LINK = "https://t.me/Bleszh";
     const PROXY_PER_PAGE = 24;
     const WS_READY_STATE_OPEN = 1;
     const WS_READY_STATE_CLOSING = 2;
@@ -1120,6 +1121,12 @@ import { connect } from "cloudflare:sockets";
     <!DOCTYPE html>
     <html lang="en" id="html" class="dark">
     <head>
+    
+    <!-- Open Graph Meta Tags untuk SEO Media Sosial -->
+    <meta property="og:image" content="https://kere.us.kg/img/botvpn.jpg"> <!-- Ganti dengan URL gambar yang sesuai -->
+    <meta property="og:url" content="https://kere.us.kg/img/botvpn.jpg">
+    <meta property="og:type" content="website">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxy List</title>
@@ -1246,6 +1253,11 @@ import { connect } from "cloudflare:sockets";
         <a href="${DONATE_LINK}" target="_blank" class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    
+        <div class="footer-social">
+                <a href="https://t.me/Bleszh" target="_blank" class="social-icon">
+                    <i class="fab fa-telegram"></i>
         </svg>
         </a>
     </div>

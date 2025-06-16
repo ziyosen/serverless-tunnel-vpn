@@ -3269,11 +3269,11 @@
 77.91.72.82,443,HU,Stark Industries Solutions
 95.164.23.71,443,HU,Stark Industries Solutions
 43.218.77.16,1443,ID,Amazon.com
-172.252.8.67:8443,ID,Dreamstart Global LLC,
-149.129.250.8:443,ID,Ciputra World,
-154.205.158.217:13109,ID,Lightnode Limited,
-172.232.239.151:587,ID,Linode,
-70.153.24.70:1233,ID,Microsoft Corporation,
+172.252.8.67:8443,ID,Dreamstart Global LLC
+149.129.250.8:443,ID,Ciputra World
+154.205.158.217:13109,ID,Lightnode Limited
+172.232.239.151:587,ID,Linode
+70.153.24.70:1233,ID,Microsoft Corporation
 172.232.239.151,587,ID,Akamai Connected Cloud
 43.218.77.16,443,ID,Amazon.com
 172.232.237.112,2053,ID,Akamai Connected Cloud

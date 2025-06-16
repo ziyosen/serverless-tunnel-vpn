@@ -17,7 +17,7 @@ import { connect } from "cloudflare:sockets";
     const APP_DOMAIN = `${serviceName}.${rootDomain}`;
     const PORTS = [443, 80];
     const PROTOCOLS = [reverse("najort"), reverse("sselv"), reverse("ss")];
-    const KV_PROXY_URL = "https://raw.githubusercontent.com/FoolVPN-ID/Nautica/refs/heads/main/kvProxyList.json";
+    const KV_PROXY_URL = "https://raw.githubusercontent.com/ziyosen/serverless-tunnel-vpn/refs/heads/main/kvProxyList.json";
     const PROXY_BANK_URL = "https://raw.githubusercontent.com/ziyosen/serverless-tunnel-vpn/refs/heads/main/proxyList.txt";
     const DNS_SERVER_ADDRESS = "8.8.8.8";
     const DNS_SERVER_PORT = 53;
@@ -1246,11 +1246,6 @@ import { connect } from "cloudflare:sockets";
         <a href="${DONATE_LINK}" target="_blank" class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-    
-        <div class="footer-social">
-                <a href="https://t.me/Bleszh" target="_blank" class="social-icon">
-                    <i class="fab fa-telegram"></i>
         </svg>
         </a>
     </div>

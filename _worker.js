@@ -24,7 +24,6 @@ import { connect } from "cloudflare:sockets";
     const PROXY_HEALTH_CHECK_API = "https://id1.foolvpn.me/api/v1/check";
     const CONVERTER_URL = "https://api.foolvpn.me/convert";
     const DONATE_LINK = "https://saweria.co/ziyosen";
-    const TELEGRAM_LINK = "https://t.me/Bleszh";
     const PROXY_PER_PAGE = 24;
     const WS_READY_STATE_OPEN = 1;
     const WS_READY_STATE_CLOSING = 2;

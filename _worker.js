@@ -3,12 +3,12 @@ import { connect } from "cloudflare:sockets";
     // import { Buffer } from "node:buffer";
 
     // Variables
-    const rootDomain = "xinquins.biz.id"; // Ganti dengan domain utama kalian
+    const rootDomain = "benxx.dpdns.org"; // Ganti dengan domain utama kalian
     const serviceName = "thefool-vpn"; // Ganti dengan nama workers kalian
     const apiKey = "1a442910de0267331d4ca5c808559e23f893f"; // Ganti dengan Global API key kalian (https://dash.cloudflare.com/profile/api-tokens)
     const apiEmail = "ziyosenstore@gmail.com"; // Ganti dengan email yang kalian gunakan
     const accountID = "ea1aab81dc8e22018131832d124a54fc"; // Ganti dengan Account ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
-    const zoneID = "a2a358249ad3e11775a9b47f965317e5"; // Ganti dengan Zone ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
+    const zoneID = "9681155dacab3597f91c060a3862362c"; // Ganti dengan Zone ID kalian (https://dash.cloudflare.com -> Klik domain yang kalian gunakan)
     let isApiReady = false;
     let proxyIP = "";
     let cachedProxyList = [];

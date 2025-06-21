@@ -18,7 +18,7 @@ import { connect } from "cloudflare:sockets";
     const PORTS = [443, 80];
     const PROTOCOLS = [reverse("najort"), reverse("sselv"), reverse("ss")];
     const KV_PROXY_URL = "https://raw.githubusercontent.com/ziyosen/serverless-tunnel-vpn/refs/heads/main/kvProxyList.json";
-    const PROXY_BANK_URL = "https://raw.githubusercontent.com/ziyosen/serverless-tunnel-vpn/refs/heads/main/proxyList.txt";
+    const PROXY_BANK_URL = "https://raw.githubusercontent.com/jaka2m/botak/refs/heads/main/cek/ipList.txt";
     const DNS_SERVER_ADDRESS = "8.8.8.8";
     const DNS_SERVER_PORT = 53;
     const PROXY_HEALTH_CHECK_API = "https://id1.foolvpn.me/api/v1/check";
